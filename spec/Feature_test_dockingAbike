@@ -1,0 +1,9 @@
+Feature Test for Docking a Bike
+
+1) require "./DockingStation"
+
+2) station = DockingStation.new
+
+3) bike = station.release_bike
+
+4) station.dock_bike(bike)

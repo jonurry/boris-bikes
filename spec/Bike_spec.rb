@@ -1,4 +1,4 @@
-require 'Bike'
+require_relative '../lib/Bike'
 
 describe Bike do
   it { should respond_to (:working?) }
