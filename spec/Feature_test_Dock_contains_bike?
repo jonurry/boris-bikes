@@ -1,7 +1,9 @@
 Feature Test for Docking a Bike
 
-1) require "./DockingStation"
+require './lib/DockingStation'
 
-2) station = DockingStation.new
+station = DockingStation.new
 
-3) station.bike
+station.bike
+
+station.release_bike
