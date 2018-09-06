@@ -4,7 +4,8 @@ describe DockingStation do
   # it "should create a DockingStation" do
   #   expect (DockingStation.new).to be_an_instance_of(DockingStation)
   # end
-
+  let(:working_bike) {double :bike}
+  let(:broken_bike) {double :bike}
   it "should respond to a message" do
     expect(subject).to respond_to :release_bike
   end
@@ -12,8 +13,10 @@ describe DockingStation do
   it { should respond_to (:release_bike) }
 
   it "get a working bike" do
-    subject.dock(Bike.new)
-    expect(subject.release_bike).to be_an_instance_of(Bike)
+    allow(working_bike).to receive(:working?).and_return(true)
+    subject.dock(working_bike)
+    expect(subject.release_bike.working?).to be true
+    # expect(subject.release_bike).to be_an_instance_of(Bike)
   end
 
   #it "dock a bike" do
@@ -26,12 +29,12 @@ describe DockingStation do
   end
 
   it "should raise and error if docking a bike at a station that already has a bike docked" do
-    DockingStation::DEFAULT_CAPACITY.times {subject.dock(Bike.new)}
-    expect {subject.dock(Bike.new)}.to raise_error("Sorry, no space!")
+    DockingStation::DEFAULT_CAPACITY.times {subject.dock(double(:bike))}
+    expect {subject.dock(double(:bike))}.to raise_error("Sorry, no space!")
   end
 
   it "station has a bike" do
-    bike = Bike.new
+    bike = double(:bike)
     subject.dock(bike)
     expect(subject.bike_store).to include(bike)
   end
@@ -42,6 +45,21 @@ describe DockingStation do
     capacity = 5
     station = DockingStation.new(capacity)
     expect(station.capacity).to eq(capacity)
+  end
+
+  it 'station should not release broken bikes' do
+    allow(broken_bike).to receive(:working?).and_return(false)
+    station = DockingStation.new()
+    station.dock(broken_bike)
+    expect {station.release_bike}.to raise_error("Sorry, all available bikes are broken")
+  end
+  it "bike_store is accurate length, regardless of bikes broken or not" do 
+    working_bike = double(:bike)
+    broken_bike = double(:bike)
+    station = DockingStation.new()
+    station.dock(working_bike)
+    station.dock(broken_bike)
+    expect(station.bike_store.length).to eq 2
   end
 
 end

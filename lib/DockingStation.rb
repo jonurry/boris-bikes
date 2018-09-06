@@ -13,7 +13,10 @@ class DockingStation
 
   def release_bike
     fail "Sorry, no bikes!" if empty?
-    @bike_store.pop
+    @bike_store.each do |bike|
+      return @bike_store.delete(bike) if bike.working?
+    end
+    fail 'Sorry, all available bikes are broken'
   end
 
   def dock(bike)
