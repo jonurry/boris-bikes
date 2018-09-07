@@ -6,6 +6,7 @@ describe DockingStation do
   # end
   let(:working_bike) {double :bike}
   let(:broken_bike) {double :bike}
+
   it "should respond to a message" do
     expect(subject).to respond_to :release_bike
   end
@@ -34,8 +35,7 @@ describe DockingStation do
   end
 
   it "station has a bike" do
-    bike = double(:bike)
-    subject.dock(bike)
+    subject.dock(working_bike)
     expect(subject.bike_store).to include(bike)
   end
 
@@ -54,8 +54,6 @@ describe DockingStation do
     expect {station.release_bike}.to raise_error("Sorry, all available bikes are broken")
   end
   it "bike_store is accurate length, regardless of bikes broken or not" do 
-    working_bike = double(:bike)
-    broken_bike = double(:bike)
     station = DockingStation.new()
     station.dock(working_bike)
     station.dock(broken_bike)
