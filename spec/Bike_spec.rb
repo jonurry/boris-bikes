@@ -1,15 +1,21 @@
-require_relative '../lib/Bike'
+require 'bike'
 
 describe Bike do
-  it { should respond_to (:working?) }
-
-  it 'check if bike is working' do
-    expect(subject.working?).to eq true
+  it 'expects an object from the Bike class to respond to the working? method' do
+    expect(subject).to respond_to(:working?)
   end
 
-  it 'should allow a user to report the bike as broken' do
-    subject.report_broken
-    expect(subject.working?).to be false  
+  it 'checks a specific bike is broken' do
+    expect(subject.broken).to eq false
   end
 
+  it 'changes bike attribute @working to false' do
+    subject.broken
+    expect(subject.working?).to eq(false)
+  end
+
+  it "#fix method fixes broken bikes" do
+    subject.broken
+    expect(subject.fix).to eq(true)
+  end
 end

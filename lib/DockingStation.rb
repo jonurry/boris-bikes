@@ -1,37 +1,46 @@
-require_relative 'Bike'
-
+require './lib/bike.rb'
 
 class DockingStation
-
   DEFAULT_CAPACITY = 20
-  attr_reader :bike_store, :capacity
+  attr_reader :bike, :capacity
 
   def initialize(capacity = DEFAULT_CAPACITY)
-    @bike_store = []
+    @array_of_bikes = []
     @capacity = capacity
   end
 
   def release_bike
-    fail "Sorry, no bikes!" if empty?
-    @bike_store.each do |bike|
-      return @bike_store.delete(bike) if bike.working?
+    fail 'not enough bikes' unless empty?
+    @array_of_bikes.each do |bike|
+      return @array_of_bikes.delete(bike) if bike.working?
     end
-    fail 'Sorry, all available bikes are broken'
+    fail 'Sorry, all the bikes are broken'
   end
 
-  def dock(bike)
-    fail "Sorry, no space!" if full?
-    @bike_store << bike
+  def dock_bike(bike)
+    fail 'too many bikes' if full?
+    @array_of_bikes << bike
+  end
+
+  def report_broken_and_dock(bike)
+    fail 'too many bikes' if full?
+    bike.broken
+    @array_of_bikes << bike
+  end
+
+  def release_broken_bikes
+    broken_bikes = @array_of_bikes.reject { |bike| bike.working? }
+    @array_of_bikes.select! { |bike| bike.working? }
+    broken_bikes
   end
 
   private
 
   def full?
-    @bike_store.count >= DEFAULT_CAPACITY
+    @array_of_bikes.count >= @capacity
   end
 
   def empty?
-    @bike_store.empty?
+    @array_of_bikes.count > 0
   end
-
 end
